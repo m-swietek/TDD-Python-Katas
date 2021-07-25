@@ -2,15 +2,15 @@ import unittest
 
 
 class BakeSale:
-    def __init__(self):
-        self.brownieQuantity = 48
+    def __init__(self, brownies: int, muffins: int, cake_pops: int, waters: int):
         self.browniePrice = 0.65
-        self.muffinQuantity = 36
         self.muffinPrice = 1.0
-        self.cakePopQuantity = 24
         self.cakePopPrice = 1.35
-        self.waterQuantity = 30
         self.waterPrice = 1.50
+        self.brownieQuantity = brownies
+        self.muffinQuantity = muffins
+        self.cakePopQuantity = cake_pops
+        self.waterQuantity = waters
 
     def get_brownie_quantity(self) -> int:
         return self.brownieQuantity
@@ -24,15 +24,37 @@ class BakeSale:
     def get_muffin_quantity(self):
         return self.muffinQuantity
 
+    def sell_brownie(self, quantity: int):
+        self.brownieQuantity -= 1
+
+    def sell_muffin(self, quantity: int):
+        self.muffinQuantity -= 1
+
+    def sell_cake_pop(self, quantity: int):
+        self.cakePopQuantity -= 1
+
+    def sell_water(self, quantity: int):
+        self.waterQuantity -= 1
+
 
 class MyTestCase(unittest.TestCase):
     def test_saleStartsWithProperItemsQuantity(self):
-        self.sale = BakeSale()
-
+        self.sale = BakeSale(48, 36, 24, 30)
         self.assertEqual(self.sale.get_brownie_quantity(), 48)
         self.assertEqual(self.sale.get_muffin_quantity(), 36)
         self.assertEqual(self.sale.get_cake_pop_quantity(), 24)
         self.assertEqual(self.sale.get_water_quantity(), 30)
+
+    def test_sellingItemsReducesQuantity(self):
+        self.sale = BakeSale(1, 1, 1, 1)
+        self.sale.sell_brownie(1)
+        self.sale.sell_muffin(1)
+        self.sale.sell_cake_pop(1)
+        self.sale.sell_water(1)
+        self.assertEqual(self.sale.get_brownie_quantity(), 0)
+        self.assertEqual(self.sale.get_muffin_quantity(), 0)
+        self.assertEqual(self.sale.get_cake_pop_quantity(), 0)
+        self.assertEqual(self.sale.get_water_quantity(), 0)
 
 
 if __name__ == '__main__':
