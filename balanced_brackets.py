@@ -9,7 +9,7 @@ def are_brackets_balanced(input_string: str) -> bool:
             left_brackets_to_balance += 1
         elif bracket == "]":
             left_brackets_to_balance -= 1
-            
+
             if left_brackets_to_balance < 0:
                 return False
 
@@ -34,7 +34,13 @@ class BalancedBracketsTest(unittest.TestCase):
         self.assertEqual(are_brackets_balanced("[][]["), False)
 
     def test_evenBracketsInWrongOrderUnbalanced(self):
+        self.assertEqual(are_brackets_balanced("][]["), False)
         self.assertEqual(are_brackets_balanced("[][]]["), False)
+
+    def test_balancedStringsBalanced(self):
+        self.assertEqual(are_brackets_balanced("[][]"), True)
+        self.assertEqual(are_brackets_balanced("[[]]"), True)
+        self.assertEqual(are_brackets_balanced("[[[][]]]"), True)
 
 
 if __name__ == '__main__':
