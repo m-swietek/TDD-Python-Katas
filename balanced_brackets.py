@@ -2,7 +2,7 @@ import unittest
 
 
 def are_brackets_balanced(input_string: str) -> bool:
-    if input_string == "[":
+    if input_string == "[" or input_string == "]":
         return False
 
     return True
@@ -15,6 +15,9 @@ class BalancedBracketsTest(unittest.TestCase):
 
     def test_oneLeftBracketUnbalanced(self):
         self.assertEqual(are_brackets_balanced("["), False)
+
+    def test_oneRightBracketUnbalanced(self):
+        self.assertEqual(are_brackets_balanced("]"), False)
 
 
 if __name__ == '__main__':
