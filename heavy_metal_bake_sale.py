@@ -42,6 +42,16 @@ class BakeSale:
     def not_enough_items_warning(self):
         print("Not enough stock")
 
+    def parse_input(self, input_string: str):
+        if input_string == "B":
+            self.sell_brownie(1)
+        elif input_string == "M":
+            self.sell_muffin(1)
+        elif input_string == "C":
+            self.sell_cake_pop(1)
+        elif input_string == "W":
+            self.sell_water(1)
+
 
 class MyTestCase(unittest.TestCase):
 
@@ -74,6 +84,23 @@ class MyTestCase(unittest.TestCase):
         self.sale.not_enough_items_warning = MagicMock()
         self.sale.sell_brownie(1)
         self.sale.not_enough_items_warning.assert_not_called()
+
+    def test_userInputCausesSellMethodCalls(self):
+        self.sale = BakeSale(1, 0, 0, 0)
+        self.sale.sell_brownie = MagicMock()
+        self.sale.sell_muffin = MagicMock()
+        self.sale.sell_cake_pop = MagicMock()
+        self.sale.sell_water = MagicMock()
+
+        self.sale.parse_input('B')
+        self.sale.sell_brownie.assert_called()
+        self.sale.parse_input('M')
+        self.sale.sell_muffin.assert_called()
+        self.sale.parse_input('C')
+        self.sale.sell_cake_pop.assert_called()
+        self.sale.parse_input('W')
+        self.sale.sell_water.assert_called()
+
 
 
 if __name__ == '__main__':
