@@ -43,14 +43,17 @@ class BakeSale:
         print("Not enough stock")
 
     def parse_input(self, input_string: str):
-        if input_string == "B":
-            self.sell_brownie(1)
-        elif input_string == "M":
-            self.sell_muffin(1)
-        elif input_string == "C":
-            self.sell_cake_pop(1)
-        elif input_string == "W":
-            self.sell_water(1)
+        items_list = input_string.split(',')
+
+        for item in items_list:
+            if item == "B":
+                self.sell_brownie(1)
+            elif item == "M":
+                self.sell_muffin(1)
+            elif item == "C":
+                self.sell_cake_pop(1)
+            elif item == "W":
+                self.sell_water(1)
 
 
 class MyTestCase(unittest.TestCase):
@@ -86,7 +89,7 @@ class MyTestCase(unittest.TestCase):
         self.sale.not_enough_items_warning.assert_not_called()
 
     def test_userInputCausesSellMethodCalls(self):
-        self.sale = BakeSale(1, 0, 0, 0)
+        self.sale = BakeSale(0, 0, 0, 0)
         self.sale.sell_brownie = MagicMock()
         self.sale.sell_muffin = MagicMock()
         self.sale.sell_cake_pop = MagicMock()
@@ -101,6 +104,31 @@ class MyTestCase(unittest.TestCase):
         self.sale.parse_input('W')
         self.sale.sell_water.assert_called()
 
+    def test_allItemsInInput(self):
+        self.sale = BakeSale(0, 0, 0, 0)
+        self.sale.sell_brownie = MagicMock()
+        self.sale.sell_muffin = MagicMock()
+        self.sale.sell_cake_pop = MagicMock()
+        self.sale.sell_water = MagicMock()
+
+        self.sale.parse_input('B,M,C,W')
+        self.sale.sell_brownie.assert_called()
+        self.sale.sell_muffin.assert_called()
+        self.sale.sell_cake_pop.assert_called()
+        self.sale.sell_water.assert_called()
+
+    def test_mixedItemsInInput(self):
+        self.sale = BakeSale(0, 0, 0, 0)
+        self.sale.sell_brownie = MagicMock()
+        self.sale.sell_muffin = MagicMock()
+        self.sale.sell_cake_pop = MagicMock()
+        self.sale.sell_water = MagicMock()
+
+        self.sale.parse_input('B,C')
+        self.sale.sell_brownie.assert_called()
+        self.sale.sell_muffin.assert_not_called()
+        self.sale.sell_cake_pop.assert_called()
+        self.sale.sell_water.assert_not_called()
 
 
 if __name__ == '__main__':
