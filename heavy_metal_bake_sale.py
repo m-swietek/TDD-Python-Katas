@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 
+
 class BakeSale:
     def __init__(self, brownies: int, muffins: int, cake_pops: int, waters: int):
         self.browniePrice = 0.65
@@ -11,6 +12,7 @@ class BakeSale:
         self.muffinQuantity = muffins
         self.cakePopQuantity = cake_pops
         self.waterQuantity = waters
+        self.totalToPay = 0.0
 
     def get_brownie_quantity(self) -> int:
         return self.brownieQuantity
@@ -24,20 +26,36 @@ class BakeSale:
     def get_muffin_quantity(self):
         return self.muffinQuantity
 
+    def get_total_to_pay(self):
+        return self.totalToPay
+
     def sell_brownie(self, quantity: int):
         if quantity > self.brownieQuantity:
             self.not_enough_items_warning()
         else:
             self.brownieQuantity -= 1
+            self.totalToPay += self.browniePrice
 
     def sell_muffin(self, quantity: int):
-        self.muffinQuantity -= 1
+        if quantity > self.muffinQuantity:
+            self.not_enough_items_warning()
+        else:
+            self.muffinQuantity -= 1
+            self.totalToPay += self.muffinPrice
 
     def sell_cake_pop(self, quantity: int):
-        self.cakePopQuantity -= 1
+        if quantity > self.cakePopQuantity:
+            self.not_enough_items_warning()
+        else:
+            self.cakePopQuantity -= 1
+            self.totalToPay += self.cakePopPrice
 
     def sell_water(self, quantity: int):
-        self.waterQuantity -= 1
+        if quantity > self.waterQuantity:
+            self.not_enough_items_warning()
+        else:
+            self.waterQuantity -= 1
+            self.totalToPay += self.waterPrice
 
     def not_enough_items_warning(self):
         print("Not enough stock")
@@ -129,6 +147,12 @@ class MyTestCase(unittest.TestCase):
         self.sale.sell_muffin.assert_not_called()
         self.sale.sell_cake_pop.assert_called()
         self.sale.sell_water.assert_not_called()
+
+    def test_totalGetsCalculatedCorrectly(self):
+        self.sale = BakeSale(1, 0, 1, 0)
+
+        self.sale.parse_input('B,C')
+        self.assertEqual(self.sale.get_total_to_pay(), 2.0)
 
 
 if __name__ == '__main__':
